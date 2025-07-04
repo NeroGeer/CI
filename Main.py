@@ -1,5 +1,6 @@
-from typing import List, Optional
 import logging
+from contextlib import asynccontextmanager
+from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -7,9 +8,7 @@ from sqlalchemy.future import select
 
 import models as models
 import schemas as schemas
-from database import engine, SessionDep
-
-from contextlib import asynccontextmanager
+from database import SessionDep, engine
 
 
 @asynccontextmanager
@@ -30,7 +29,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(lifespan=lifespan)
 
 
-@app.post('/recipes', response_model=schemas.RecipesOut)
+@app.post("/recipes", response_model=schemas.RecipesOut)
 async def create_recipes(data: schemas.RecipesIn, session: SessionDep):
     logger.info("Creating recipes...")
     recipe_dict = data.model_dump()  # или recipe.model_dump() для Pydantic v2
@@ -40,7 +39,7 @@ async def create_recipes(data: schemas.RecipesIn, session: SessionDep):
     return new_recipes
 
 
-@app.get('/recipes/')
+@app.get("/recipes/")
 async def get_recipes(session: SessionDep, idx: Optional[int] = None):
 
     if idx is not None:
@@ -60,7 +59,6 @@ async def get_recipes(session: SessionDep, idx: Optional[int] = None):
         return result.scalars().all()
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    uvicorn.run('main:app', host='127.0.0.1', port=8000)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000)
