@@ -49,7 +49,7 @@ async def get_recipes(session: SessionDep, idx: Optional[int] = None):
         if not recipe:
             raise HTTPException(status_code=404, detail="Recipe not found")
 
-        recipe.popularity += 1
+        recipe.popularity += 1 # type: ignore[assignment]
         await session.commit()
         return recipe
 
