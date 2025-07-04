@@ -1,77 +1,110 @@
-name: Tests on Pull Request
+name: Тесты при Pull Request
 
 on:
   pull_request:
     branches:
-      - main   # или нужная ветка
+      - main  # Укажите нужную ветку
 
 jobs:
-
-  mypy:
-    runs-on: ubuntu-latest
-    needs: unittest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install mypy
-        run: pip install mypy
-      - name: Run mypy
-        run: mypy src/
-
-  black:
-    runs-on: ubuntu-latest
-    needs: unittest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install black
-        run: pip install black
-      - name: Run black check
-        run: black --diff --check src/
-
-  isort:
-    runs-on: ubuntu-latest
-    needs: unittest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install isort
-        run: pip install isort
-      - name: Run isort check
-        run: isort --diff --check-only src/
-
-  flake8:
-    runs-on: ubuntu-latest
-    needs: unittest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python 3.13
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Install flake8
-        run: pip install flake8
-      - name: Run flake8
-        run: flake8 src/
-
   unittest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python 3.13
+      - name: Настройка Python 3.13
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run pytest
-        run: pytest tests
+      - name: Кэширование зависимостей Python
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Установка зависимостей
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install pytest
+      - name: Запуск pytest
+        run: pytest tests/
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Настройка Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Кэширование зависимостей Python
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Установка зависимостей
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install mypy
+      - name: Запуск mypy
+        run: mypy src/
+
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Настройка Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Кэширование зависимостей Python
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Установка black
+        run: pip install black
+      - name: Проверка с black
+        run: black --diff --check src/
+
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Настройка Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Кэширование зависимостей Python
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Установка isort
+        run: pip install isort
+      - name: Проверка с isort
+        run: isort --diff --check-only src/
+
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Настройка Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Кэширование зависимостей Python
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - name: Установка flake8
+        run: pip install flake8
+      - name: Запуск flake8
+        run: flake8 src/
