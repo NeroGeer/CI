@@ -9,8 +9,7 @@ from sqlalchemy.future import select
 import models as models
 import schemas as schemas
 from database import SessionDep, engine
-
-
+a
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Код при старте приложения (startup)
