@@ -25,9 +25,8 @@ async def lifespan(app: FastAPI):
     logger.info("Database engine disposed.")
 
 
-logger = logging.getLogger(__name__)
 app = FastAPI(lifespan=lifespan)
-
+logger = logging.getLogger(__name__)
 
 @app.post("/recipes", response_model=schemas.RecipesOut)
 async def create_recipes(data: schemas.RecipesIn, session: SessionDep):
