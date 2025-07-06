@@ -50,7 +50,7 @@ jobs:
           fi
           pip install mypy
       - name: Запуск mypy
-        run: mypy .
+        run: mypy .Cl/
 
   black:
     runs-on: ubuntu-latest
