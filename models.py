@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
 class Recipes(Base):
     __tablename__ = "Recipes"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True, nullable=False, index=False)
+    title = Column(String, index=True, nullable=False)
     time_cooking = Column(Integer, nullable=False)
     ingredients = Column(JSON, nullable=False)
     description = Column(String, nullable=False)
