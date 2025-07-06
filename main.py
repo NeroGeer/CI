@@ -32,7 +32,7 @@ app = FastAPI(lifespan=lifespan)
 @app.post("/recipes", response_model=schemas.RecipesOut)
 async def create_recipes(data: schemas.RecipesIn, session: SessionDep):
     logger.info("Creating recipes...")
-    recipe_dict = data.model_dump()  # или recipe.model_dump() для Pydantic v2
+    recipe_dict = data.model_dump()
     new_recipes = models.Recipes(**recipe_dict)
     session.add(new_recipes)
     await session.commit()
@@ -49,7 +49,7 @@ async def get_recipes(session: SessionDep, idx: Optional[int] = None):
         if not recipe:
             raise HTTPException(status_code=404, detail="Recipe not found")
 
-        recipe.popularity += 1 # type: ignore[assignment]
+        recipe.popularity += 1  # type: ignore[assignment]
         await session.commit()
         return recipe
 
