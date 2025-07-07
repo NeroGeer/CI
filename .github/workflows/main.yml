@@ -116,5 +116,7 @@ jobs:
         run: tree -a -L 2
       - name: Показать содержимое .flake8
         run: cat .flake8
-      - name: Запуск flake8
-        run: flake8 .
+      - name: Запуск flake8 из корня
+        run: |
+          cd ${{ github.workspace }}
+          flake8 .
