@@ -114,9 +114,7 @@ jobs:
         run: pip install flake8
       - name: Просмотр структуры проекта
         run: tree -a -L 2
-      - name: Проверить версию flake8 и конфиг
-        run: |
-          flake8 --version
-          flake8 --show-config | head -40
+      - name: Показать содержимое .flake8
+        run: cat .flake8
       - name: Запуск flake8
         run: flake8 .
