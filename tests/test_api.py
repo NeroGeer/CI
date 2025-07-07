@@ -5,7 +5,7 @@ import sys
 from httpx import ASGITransport, AsyncClient
 
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from apps import app
 

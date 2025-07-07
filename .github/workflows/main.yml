@@ -27,6 +27,7 @@ jobs:
           fi
           pip install pytest
       - name: Запуск pytest
+        working-directory: ./  # Явно указываем корневую директорию
         run: pytest tests/
 
   mypy:
