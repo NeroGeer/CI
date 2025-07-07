@@ -10,24 +10,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Настройка Python 3.13
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+
       - name: Кэширование зависимостей Python
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: ${{ runner.os }}-pip-
+
       - name: Установка зависимостей
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
           pip install pytest
+
       - name: Запуск pytest
-        run: pytest tests/
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest tests/
 
   mypy:
     runs-on: ubuntu-latest

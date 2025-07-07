@@ -1,19 +1,13 @@
 import pytest
-import os
-import sys
-
 from httpx import ASGITransport, AsyncClient
 
-
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from ..apps import app
+from apps import app
 
 
 @pytest.mark.asyncio
 async def test_post_recipes():
     async with AsyncClient(
-            transport=ASGITransport(app=app), base_url="http://test"
+        transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
         response = await client.post(
             "/recipes",
@@ -30,7 +24,7 @@ async def test_post_recipes():
 @pytest.mark.asyncio
 async def test_get_recipes():
     async with AsyncClient(
-            transport=ASGITransport(app=app), base_url="http://test"
+        transport=ASGITransport(app=app), base_url="http://test"
     ) as client:
         response = await client.get("/recipes/")
         assert response.status_code == 200
