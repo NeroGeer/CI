@@ -118,5 +118,5 @@ jobs:
         run: cat .flake8
       - name: Запуск flake8 из корня
         run: |
-          cd ${{ github.workspace }}
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
           flake8 .
