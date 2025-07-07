@@ -3,31 +3,37 @@ name: Тесты при Pull Request
 on:
   pull_request:
     branches:
-      - main  # Укажите нужную ветку
+      - main
 
 jobs:
   unittest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Настройка Python 3.13
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+
       - name: Кэширование зависимостей Python
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: ${{ runner.os }}-pip-
+
       - name: Установка зависимостей
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
           pip install pytest
+
       - name: Запуск pytest
-        run: pytest tests/
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest tests/
 
   mypy:
     runs-on: ubuntu-latest
@@ -50,7 +56,7 @@ jobs:
           fi
           pip install mypy
       - name: Запуск mypy
-        run: mypy ./Cl
+        run: mypy . --explicit-package-bases
 
   black:
     runs-on: ubuntu-latest
@@ -69,7 +75,7 @@ jobs:
       - name: Установка black
         run: pip install black
       - name: Проверка с black
-        run: black --diff --check ./Cl
+        run: black --diff --check .
 
   isort:
     runs-on: ubuntu-latest
@@ -88,7 +94,7 @@ jobs:
       - name: Установка isort
         run: pip install isort
       - name: Проверка с isort
-        run: isort --diff --check-only ./Cl
+        run: isort --diff --check-only --profile black .
 
   flake8:
     runs-on: ubuntu-latest
@@ -106,5 +112,11 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
       - name: Установка flake8
         run: pip install flake8
-      - name: Запуск flake8
-        run: flake8 ./Cl
+      - name: Просмотр структуры проекта
+        run: tree -a -L 2
+      - name: Показать содержимое .flake8
+        run: cat .flake8
+      - name: Запуск flake8 из корня
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          flake8 .
