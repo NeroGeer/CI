@@ -113,6 +113,6 @@ jobs:
       - name: Установка flake8
         run: pip install flake8
       - name: Просмотр структуры проекта
-        run: tree -L 2
+        run: tree -a -L 2
       - name: Запуск flake8
         run: flake8 .
