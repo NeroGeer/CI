@@ -117,4 +117,6 @@ jobs:
       - name: Показать содержимое .flake8
         run: cat .flake8
       - name: Запуск flake8 из корня
-        run: flake8 --config=/path/to/.flake8 .
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          flake8 .
